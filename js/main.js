@@ -1,7 +1,7 @@
 import { createElement } from './dom.js';
 import { createGame } from './game.js';
 import { renderBoard, setCardState } from './board.js';
-import { openModal, closeModal } from './modal.js'; 
+import { openModal, closeModal } from './modal.js';
 
 function createHeader() {
     const newGameButton = createElement('button', {
@@ -59,6 +59,22 @@ function initApp() {
             stats.movesValue.textContent = String(moves);
             stats.pairsValue.textContent = String(pairs);
         },
+        onWin: (moves) => {
+            openModal({
+                title: 'You won!',
+                content: createElement('p', { text: `Total moves: ${moves}` }),
+                actions: [
+                    {
+                        text: 'New game',
+                        onClick: () => {
+                            closeModal();
+                            game.start();
+                        },
+                    },
+                    { text: 'Close', onClick: closeModal },
+                ],
+            });
+        },
     });
 
     board.addEventListener('click', (event) => {
@@ -69,12 +85,6 @@ function initApp() {
     header.newGameButton.addEventListener('click', game.start);
 
     game.start();
-
-    openModal({
-        title: 'Test',
-        content: createElement('p', { text: 'Hello' }),
-        actions: [{ text: 'Close', onClick: closeModal }],
-    });
 }
 
 initApp();
