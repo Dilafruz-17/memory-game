@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+}
+
+.header__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.main {
+  padding: 24px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+}
