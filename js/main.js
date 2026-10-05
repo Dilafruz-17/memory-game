@@ -1,6 +1,7 @@
 import { createElement } from './dom.js';
 import { createGame } from './game.js';
 import { renderBoard, setCardState } from './board.js';
+import { openModal, closeModal } from './modal.js'; 
 
 function createHeader() {
     const newGameButton = createElement('button', {
@@ -68,6 +69,12 @@ function initApp() {
     header.newGameButton.addEventListener('click', game.start);
 
     game.start();
+
+    openModal({
+        title: 'Test',
+        content: createElement('p', { text: 'Hello' }),
+        actions: [{ text: 'Close', onClick: closeModal }],
+    });
 }
 
 initApp();
