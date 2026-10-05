@@ -97,3 +97,15 @@ body {
   justify-content: flex-end;
   margin-top: 24px;
 }
+
+.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}

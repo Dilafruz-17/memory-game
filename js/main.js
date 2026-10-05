@@ -2,6 +2,8 @@ import { createElement } from './dom.js';
 import { createGame } from './game.js';
 import { renderBoard, setCardState } from './board.js';
 import { openModal, closeModal } from './modal.js';
+import { saveResult } from './storage.js';
+import { createLeaderboardContent } from './leaderboard.js';
 
 function createHeader() {
     const newGameButton = createElement('button', {
@@ -39,6 +41,14 @@ function createStats() {
     return { element, movesValue, pairsValue };
 }
 
+function openLeaderboard() {
+    openModal({
+        title: 'Leaderboard',
+        content: createLeaderboardContent(),
+        actions: [{ text: 'Close', onClick: closeModal }],
+    });
+}
+
 function initApp() {
     const header = createHeader();
     const stats = createStats();
@@ -60,6 +70,7 @@ function initApp() {
             stats.pairsValue.textContent = String(pairs);
         },
         onWin: (moves) => {
+            saveResult(moves);
             openModal({
                 title: 'You won!',
                 content: createElement('p', { text: `Total moves: ${moves}` }),
@@ -83,6 +94,7 @@ function initApp() {
     });
 
     header.newGameButton.addEventListener('click', game.start);
+    header.leaderboardButton.addEventListener('click', openLeaderboard);
 
     game.start();
 }
