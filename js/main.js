@@ -1,6 +1,6 @@
 import { createElement } from './dom.js';
-import { createDeck } from './card.js';
-import { renderBoard } from './board.js';
+import { createGame } from './game.js';
+import { renderBoard, setCardState } from './board.js';
 
 function createHeader() {
     const newGameButton = createElement('button', {
@@ -15,35 +15,59 @@ function createHeader() {
         attrs: { type: 'button' },
     });
 
-    return createElement('header', { className: 'header' }, [
+    const element = createElement('header', { className: 'header' }, [
         createElement('h1', { className: 'title', text: 'Memory Game' }),
         createElement('div', { className: 'header__actions' }, [
             newGameButton,
             leaderboardButton,
         ]),
     ]);
+
+    return { element, newGameButton, leaderboardButton };
 }
 
 function createStats() {
-    return createElement('div', { className: 'stats' }, [
-        createElement('p', { text: 'Moves: 0' }),
-        createElement('p', { text: 'Pairs: 0 / 8' }),
-    ]);
-}
+    const movesValue = createElement('span', { text: '0' });
+    const pairsValue = createElement('span', { text: '0' });
 
-function createBoard() {
-    return createElement('div', { className: 'board' });
+    const element = createElement('div', { className: 'stats' }, [
+        createElement('p', {}, ['Moves: ', movesValue]),
+        createElement('p', {}, ['Pairs: ', pairsValue, ' / 8']),
+    ]);
+
+    return { element, movesValue, pairsValue };
 }
 
 function initApp() {
-    const board = createBoard();
-    const main = createElement('main', { className: 'main' }, [
-        createStats(),
-        board,
-    ]);
-    document.body.append(createHeader(), main);
+    const header = createHeader();
+    const stats = createStats();
+    const board = createElement('div', { className: 'board' });
+    const main = createElement('main', { className: 'main' }, [stats.element, board]);
 
-    renderBoard(board, createDeck());
+    document.body.append(header.element, main);
+
+    const game = createGame({
+        onStart: (deck) => renderBoard(board, deck),
+        onFlip: (uid) => setCardState(board, [uid], 'card--open', true),
+        onClose: (uids) => setCardState(board, uids, 'card--open', false),
+        onMatch: (uids) => {
+            setCardState(board, uids, 'card--open', false);
+            setCardState(board, uids, 'card--matched', true);
+        },
+        onStats: (moves, pairs) => {
+            stats.movesValue.textContent = String(moves);
+            stats.pairsValue.textContent = String(pairs);
+        },
+    });
+
+    board.addEventListener('click', (event) => {
+        const card = event.target.closest('.card');
+        if (card) game.flip(card.dataset.uid);
+    });
+
+    header.newGameButton.addEventListener('click', game.start);
+
+    game.start();
 }
 
 initApp();

@@ -25,3 +25,10 @@ export function renderBoard(boardElement, deck) {
     const cards = deck.map(createCardElement);
     boardElement.replaceChildren(...cards);
 }
+
+export function setCardState(boardElement, uids, className, isOn) {
+    uids.forEach((uid) => {
+        const card = boardElement.querySelector(`[data-uid="${uid}"]`);
+        if (card) card.classList.toggle(className, isOn);
+    });
+}
