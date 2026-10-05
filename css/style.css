@@ -23,3 +23,27 @@ body {
   display: flex;
   gap: 24px;
 }
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 480px;
+  margin: 24px auto 0;
+}
+
+.card {
+  aspect-ratio: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #4f46e5;
+  cursor: pointer;
+}
+
+.card__image {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

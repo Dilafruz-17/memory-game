@@ -1,4 +1,6 @@
 import { createElement } from './dom.js';
+import { createDeck } from './card.js';
+import { renderBoard } from './board.js';
 
 function createHeader() {
     const newGameButton = createElement('button', {
@@ -34,11 +36,14 @@ function createBoard() {
 }
 
 function initApp() {
+    const board = createBoard();
     const main = createElement('main', { className: 'main' }, [
         createStats(),
-        createBoard(),
+        board,
     ]);
     document.body.append(createHeader(), main);
+
+    renderBoard(board, createDeck());
 }
 
 initApp();
